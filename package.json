@@ -1,0 +1,22 @@
+{
+  "name": "aura-jsts-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arturbereh/aura-jsts-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arturbereh/aura-jsts-project/issues"
+  },
+  "homepage": "https://github.com/arturbereh/aura-jsts-project#readme",
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^22.20.3"
+  }
+}
