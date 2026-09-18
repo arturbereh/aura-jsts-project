@@ -1,13 +1,13 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../../pages/loginPage';
-import { STANDARD_USER, LOCKED_OUT_USER } from '../../data/users';
+import { WEBSITE, STANDARD_USER, LOCKED_OUT_USER } from '../../data/users';
 
 test.describe('Login', () => {
 
   test('should login successfully with valid credentials', async ({ page }) => {
     const loginPage = new LoginPage(page);
 
-    await loginPage.open();
+    await loginPage.open(WEBSITE.prod);
     await loginPage.login(STANDARD_USER.username, STANDARD_USER.password)
 
     await expect(page).toHaveURL(/inventory.html/);
@@ -18,7 +18,7 @@ test.describe('Login', () => {
   test('should display a locked out message with locked credentials', async ({ page }) => {
     const loginPage = new LoginPage(page);
 
-    await loginPage.open();
+    await loginPage.open(WEBSITE.prod);
     await loginPage.login(LOCKED_OUT_USER.username, LOCKED_OUT_USER.password)
 
     await expect(loginPage.errorMessage).toBeVisible();
@@ -29,7 +29,7 @@ test.describe('Login', () => {
   test('should display an error message when username is empty', async ({ page }) => {
     const loginPage = new LoginPage(page);
 
-    await loginPage.open();
+    await loginPage.open(WEBSITE.prod);
     await loginPage.login('', '')
 
     await expect(loginPage.errorMessage).toBeVisible();
