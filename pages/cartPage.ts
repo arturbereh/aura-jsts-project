@@ -13,8 +13,12 @@ constructor(page: Page) {
     //     { hasText: 'Sauce Labs Bolt T-Shirt', }); 
     }
 
+cartItem(itemName: string): Locator {
+    return this.page.locator('[data-test="inventory-item"]').filter({ hasText: itemName })
+}
+
 product(itemName: string): Locator {
-    return this.page.locator('[data-test="inventory-item-name"]').filter({ hasText: itemName })
+    return this.cartItem(itemName).locator('[data-test="inventory-item-name"]')
 }
 
 async removeCartItem(itemName: string) {

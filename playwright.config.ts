@@ -37,6 +37,12 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
+      name: 'api',
+      use: {
+        baseURL: 'https://jsonplaceholder.typicode.com/',
+        },
+    },
+    {
       name: 'setup',
       testMatch: /.*\.setup\.ts/,
     },
