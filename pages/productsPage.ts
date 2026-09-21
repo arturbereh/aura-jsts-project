@@ -12,6 +12,10 @@ export class ProductsPage {
     this.shoppingCount = page.locator('[data-test="shopping-cart-badge"]');
   }
 
+  async open() {
+  await this.page.goto('/inventory.html');
+}
+
   async addItem(itemName: string) {
     const item = this.page.locator('.inventory_item').filter({hasText: itemName,});
 

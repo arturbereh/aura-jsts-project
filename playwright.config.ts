@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import { WEBSITE } from './data/users';
 
 /**
  * Read environment variables from file.
@@ -29,24 +30,36 @@ export default defineConfig({
     // baseURL: 'http://localhost:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    baseURL: WEBSITE.prod,
     trace: 'on-first-retry',
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: 'setup',
+      testMatch: /.*\.setup\.ts/,
     },
 
     {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      name: 'desktop - chromium',
+      use: { ...devices['Desktop Chrome'], 
+      storageState: 'playwright/.auth/user.json',
+      },
+      dependencies: ['setup'],
     },
 
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
+
     {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      name: 'desktop - webkit',
+      use: { ...devices['Desktop Safari'],
+      storageState: 'playwright/.auth/user.json',
+      },
+      dependencies: ['setup'],
     },
 
     /* Test against mobile viewports. */
@@ -54,10 +67,14 @@ export default defineConfig({
     //   name: 'Mobile Chrome',
     //   use: { ...devices['Pixel 5'] },
     // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
+    {
+      name: 'iPhone 16e landscape - Mobile Firefox',
+      use: { ...devices['iPhone 16e landscape'],
+      defaultBrowserType: 'firefox',
+      storageState: 'playwright/.auth/user.json',
+      },
+      dependencies: ['setup'],
+    },
 
     /* Test against branded browsers. */
     // {
