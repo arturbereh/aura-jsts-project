@@ -1,5 +1,6 @@
 export const WEBSITE = {
   prod: 'https://www.saucedemo.com/',
+  stage: 'https://www.example.com/',
 };
 
 export const STANDARD_USER = {
