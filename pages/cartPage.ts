@@ -16,5 +16,14 @@ constructor(page: Page) {
 product(itemName: string): Locator {
     return this.page.locator('[data-test="inventory-item-name"]').filter({ hasText: itemName })
 }
+
+async removeCartItem(itemName: string) {
+    const item = itemName.toLowerCase().replaceAll(' ', '-');
+
+    const removeButton = this.page.locator(`[data-test="remove-${item}"]`
+  );
+  await removeButton.click() 
+  }
+
 }
     

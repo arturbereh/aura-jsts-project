@@ -26,7 +26,7 @@ export class ProductsPage {
     await this.shoppingCart.click();
   }
 
-  async removeItem(itemName: string) {
+  async removeProductsItem(itemName: string) {
     const item = this.page.locator('.inventory_item').filter({hasText: itemName,});
 
     await item.getByRole('button', { name: 'Remove' }).click();

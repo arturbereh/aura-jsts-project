@@ -1,7 +1,4 @@
 import { test, expect } from '../../fixtures/test';
-import { LoginPage } from '../../pages/loginPage';
-import { ProductsPage } from '../../pages/productsPage';
-import { CartPage } from '../../pages/cartPage';
 import { PRODUCTS } from '../../data/products';
 
 
@@ -13,9 +10,7 @@ const products = [
     PRODUCTS.tshirt,
 ]
 
-test('should add products to cart', async ({ productsPage, page }) => {
-    const cartPage = new CartPage(page);
-
+test('should add products to cart', async ({ productsPage, cartPage }) => {
     await productsPage.addItem(PRODUCTS.backpack);
     await productsPage.addItem(PRODUCTS.tshirt);
     await expect (productsPage.shoppingCount).toHaveText('2');
@@ -26,7 +21,7 @@ test('should add products to cart', async ({ productsPage, page }) => {
 })
 
 for (const product of products) {
-  test(`should add ${product} to cart`, async ({ productsPage, page }) => {
+  test(`should add ${product} to cart`, async ({ productsPage }) => {
     await productsPage.open();
     await productsPage.addItem(product);
 
@@ -34,10 +29,10 @@ for (const product of products) {
     });
 }
 
-  test('should remove item from card', async ({ productsPage, page }) => {
+  test('should remove item from cart on products page', async ({ productsPage }) => {
     await productsPage.addItem(PRODUCTS.backpack);
     await expect(productsPage.shoppingCount).toHaveText('1');
 
-    await productsPage.removeItem(PRODUCTS.backpack);
+    await productsPage.removeProductsItem(PRODUCTS.backpack);
     await expect(productsPage.shoppingCount).not.toBeVisible();
   })
