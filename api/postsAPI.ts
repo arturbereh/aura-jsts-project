@@ -1,4 +1,5 @@
 import { type APIRequestContext, type APIResponse } from '@playwright/test';
+import type { CreatePostRequest } from '../types/post';
 
 export class PostsApi {
   readonly request: APIRequestContext;
@@ -11,13 +12,9 @@ export class PostsApi {
     return this.request.get(`/posts/${postId}`);
   }
 
-  async createPost(title: string, body: string, userId: number): Promise<APIResponse> {
+  async createPost(data: CreatePostRequest): Promise<APIResponse> {
   return this.request.post('/posts', {
-    data: {
-      title,
-      body,
-      userId,
-    },
+    data,
   });
 }
   async updatePost(postId: number, title: string, body: string, userId: number): Promise<APIResponse> {
@@ -29,4 +26,7 @@ export class PostsApi {
     },
   });
 }
+async deletePost(postId: number): Promise<APIResponse> {
+  return this.request.delete(`/posts/${postId}`)
+};
 }

@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, request } from '@playwright/test';
 import { PostsApi } from '../../api/postsAPI';
 
 test('should get booking', async ({ request }) => {
@@ -27,11 +27,11 @@ test('should get booking', async ({ request }) => {
 test('should create a post', async ({ request }) => {
   const postsApi = new PostsApi(request);
 
-  const response = await postsApi.createPost(
-    'Testuano post title field',
-    'Liberati post body field',
-    7
-  );
+  const response = await postsApi.createPost({
+    title: 'Testuano post title field',
+    body: 'Liberati post body field',
+    userId: 7,
+  });
 
   expect(response.status()).toBe(201);
 
@@ -61,3 +61,10 @@ test('should update a post', async ({ request }) => {
   expect(body.body).toBe('Updated via API body field');
   expect(body.userId).toBe(7);
 });
+
+test('should delete existing post', async ({ request }) => {
+  const postApi = new PostsApi(request);
+
+  const response = await postApi.deletePost(7);
+  expect(response.status()).toBe(200);
+})
