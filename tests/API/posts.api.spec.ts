@@ -1,13 +1,15 @@
-import { test, expect, request } from '@playwright/test';
+import { test, expect } from '../../fixtures/test';
 import { PostsApi } from '../../api/postsAPI';
 import type { Post } from '../../types/post';
 import { postSchema } from '../../schemas/post.schema';
 import { validateSchema } from '../../utils/validateSchema';
+import { POST_DATA, POSTS_DATA } from '../../data/posts';
+import { logApiResponse } from '../../utils/logApiResponse';
 
-test('should get booking', async ({ request }) => {
-  const postsApi = new PostsApi(request);
-
+test('should get booking', async ({ postsApi }) => {
   const response = await postsApi.getPost(1);
+
+  await logApiResponse(response);
 
   expect(response.status()).toBe(200);
 
@@ -19,23 +21,21 @@ test('should get booking', async ({ request }) => {
   validateSchema(body, postSchema);
 });
 
-test('should create a post', async ({ request }) => {
-  const postsApi = new PostsApi(request);
+for (const postData of POSTS_DATA) {
+  test(`should create post: ${postData.title}`, async ({ postsApi }) => {
+    const response = await postsApi.createPost(POST_DATA);
 
-  const response = await postsApi.createPost({
-    title: 'Testuano post title field',
-    body: 'Liberati post body field',
-    userId: 7,
+    expect(response.status()).toBe(201);
+
+    const body: Post = await response.json();
+
+    expect(body.title).toBe(POST_DATA.title);
+    expect(body.body).toBe(POST_DATA.body);
+    expect(body.userId).toBe(POST_DATA.userId);
+
+    validateSchema(body, postSchema);
   });
-
-  expect(response.status()).toBe(201);
-
-  const body: Post = await response.json();
-
-  expect(body.title).toBe('Testuano post title field');
-  expect(body.body).toBe('Liberati post body field');
-  expect(body.userId).toBe(7);
-});
+  }
 
 test('should update a post', async ({ request }) => {
   const postsApi = new PostsApi(request);
