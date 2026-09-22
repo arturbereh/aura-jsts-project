@@ -1,27 +1,22 @@
 import { test, expect, request } from '@playwright/test';
 import { PostsApi } from '../../api/postsAPI';
+import type { Post } from '../../types/post';
+import { postSchema } from '../../schemas/post.schema';
+import { validateSchema } from '../../utils/validateSchema';
 
 test('should get booking', async ({ request }) => {
   const postsApi = new PostsApi(request);
+
   const response = await postsApi.getPost(1);
-  
+
   expect(response.status()).toBe(200);
 
-  const body = await response.json();
+  const body: Post = await response.json();
 
   expect(body.id).toBe(1);
   expect(body.userId).toBe(1);
-  expect(body.title).toBe('sunt aut facere repellat provident occaecati excepturi optio reprehenderit')
 
-  expect(body).toHaveProperty('userId');
-  expect(body).toHaveProperty('id');
-  expect(body).toHaveProperty('title');
-  expect(body).toHaveProperty('body');
-
-  expect(typeof body.userId).toBe('number');
-  expect(typeof body.id).toBe('number');
-  expect(typeof body.title).toBe('string');
-  expect(typeof body.body).toBe('string');
+  validateSchema(body, postSchema);
 });
 
 test('should create a post', async ({ request }) => {
@@ -35,7 +30,7 @@ test('should create a post', async ({ request }) => {
 
   expect(response.status()).toBe(201);
 
-  const body = await response.json();
+  const body: Post = await response.json();
 
   expect(body.title).toBe('Testuano post title field');
   expect(body.body).toBe('Liberati post body field');
