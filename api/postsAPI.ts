@@ -14,6 +14,10 @@ export class PostsApi {
 
   async createPost(data: CreatePostRequest): Promise<APIResponse> {
   return this.request.post('/posts', {
+    headers: { 
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
     data,
   });
 }

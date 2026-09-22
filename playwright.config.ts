@@ -43,6 +43,12 @@ export default defineConfig({
         },
     },
     {
+      name: 'auth-api',
+      use: {
+      baseURL: 'https://dummyjson.com',
+     },
+    },
+    {
       name: 'setup',
       testMatch: /.*\.setup\.ts/,
     },

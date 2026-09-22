@@ -2,11 +2,13 @@ import { test as base, request } from '@playwright/test';
 import { ProductsPage } from '../pages/productsPage';
 import { CartPage } from '../pages/cartPage';
 import { PostsApi } from '../api/postsAPI';
+import { AuthApi } from '../api/authAPI';
 
 type Fixtures = {
     productsPage: ProductsPage;
     cartPage: CartPage;
     postsApi: PostsApi;
+    authApi: AuthApi;
 };
 
 export const test = base.extend<Fixtures>({
@@ -28,6 +30,11 @@ export const test = base.extend<Fixtures>({
         const postsApi = new PostsApi(request);
 
         await use(postsApi);
+    },
+
+    authApi: async ({ request }, use) => {
+        const authApi = new AuthApi(request);
+        await use(authApi);
     },
 });
 
