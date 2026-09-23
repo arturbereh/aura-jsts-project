@@ -38,15 +38,18 @@ export default defineConfig({
   projects: [
     {
       name: 'api',
+      testMatch: /.*\.api\.spec\.ts/,
+      testIgnore: /.*auth\.api\.spec\.ts/,
       use: {
-        baseURL: 'https://jsonplaceholder.typicode.com/',
-        },
+      baseURL: 'https://jsonplaceholder.typicode.com',
+    },
     },
     {
       name: 'auth-api',
+      testMatch: /.*auth\.api\.spec\.ts/,
       use: {
-      baseURL: 'https://dummyjson.com',
-     },
+        baseURL: 'https://dummyjson.com',
+    },
     },
     {
       name: 'setup',
