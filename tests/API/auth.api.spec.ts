@@ -10,11 +10,9 @@ test('should get current user with access token', async ({ authApi }) => {
 
   const loginBody = await loginResponse.json();
 
-  const token = loginBody.accessToken;
+  expect(loginBody.accessToken).toBeTruthy();
 
-  expect(token).toBeTruthy();
-
-  const userResponse = await authApi.getCurrentUser(token);
+  const userResponse = await authApi.getCurrentUser();
 
   expect(userResponse.status()).toBe(200);
 
