@@ -3,6 +3,11 @@ export const WEBSITE = {
   stage: 'https://www.example.com/',
 };
 
+export const API_WEBSITE = {
+    requests: 'https://jsonplaceholder.typicode.com',
+    auth: 'https://dummyjson.com',
+};
+
 export const STANDARD_USER = {
   username: 'standard_user',
   password: 'secret_sauce',

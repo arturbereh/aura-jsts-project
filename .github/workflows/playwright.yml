@@ -6,10 +6,22 @@ on:
   pull_request:
     branches: [ main, master ]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   ui-tests:
-    name: UI Tests
+    name: UI Tests - ${{ matrix.browser }}
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        browser:
+          - "desktop - chromium"
+          - "desktop - webkit"
+          - "iPhone 16e landscape - Mobile Firefox"
 
     steps:
       - name: Checkout repository
@@ -28,7 +40,16 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run UI tests
-        run: npx playwright test tests/UI --project="desktop - chromium"
+        run: npx playwright test tests/UI --project="${{ matrix.browser }}"
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-playwright-report-${{ matrix.browser }}
+          path: |
+            playwright-report/
+            test-results/
 
   api-tests:
     name: API Tests
@@ -49,3 +70,12 @@ jobs:
 
       - name: Run API tests
         run: npx playwright test tests/API --project=api --project=auth-api
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-playwright-report
+          path: |
+            playwright-report/
+            test-results/
