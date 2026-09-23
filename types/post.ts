@@ -10,3 +10,9 @@ export type CreatePostRequest = {
     body: string;
     userId: number;
 };
+
+export type UpdatePostRequest = {
+    title: string;
+    body: string;
+    userId: number;
+};

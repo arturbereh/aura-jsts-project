@@ -1,12 +1,9 @@
-import { test, expect } from '@playwright/test';
-import { LoginPage } from '../../pages/loginPage';
+import { test, expect } from '../../fixtures/test';
 import { WEBSITE, STANDARD_USER, LOCKED_OUT_USER } from '../../data/users';
 
+
 test.describe('Login', () => {
-
-  test('should login successfully with valid credentials', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-
+  test('should login successfully with valid credentials', async ({ loginPage, page }) => {
     await loginPage.open(WEBSITE.prod);
     await loginPage.login(STANDARD_USER.username, STANDARD_USER.password)
 
@@ -15,9 +12,7 @@ test.describe('Login', () => {
   });
 
 
-  test('should display a locked out message with locked credentials', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-
+  test('should display a locked out message with locked credentials', async ({ loginPage }) => {
     await loginPage.open(WEBSITE.prod);
     await loginPage.login(LOCKED_OUT_USER.username, LOCKED_OUT_USER.password)
 
@@ -26,9 +21,7 @@ test.describe('Login', () => {
   });
 
 
-  test('should display an error message when username is empty', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-
+  test('should display an error message when username is empty', async ({ loginPage }) => {
     await loginPage.open(WEBSITE.prod);
     await loginPage.login('', '')
 

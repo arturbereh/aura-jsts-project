@@ -1,5 +1,5 @@
 import { type APIRequestContext, type APIResponse } from '@playwright/test';
-import type { CreatePostRequest } from '../types/post';
+import type { CreatePostRequest, UpdatePostRequest } from '../types/post';
 
 export class PostsApi {
   readonly request: APIRequestContext;
@@ -21,12 +21,12 @@ export class PostsApi {
     data,
   });
 }
-  async updatePost(postId: number, title: string, body: string, userId: number): Promise<APIResponse> {
-  return this.request.put(`/posts/${postId}`, {
+  async updatePost(data: UpdatePostRequest): Promise<APIResponse> {
+  return this.request.put(`/posts/${data.userId}`, {
     data: {
-      title,
-      body,
-      userId,
+      title: data.title,
+      body: data.body,
+      userId: data.userId,
     },
   });
 }

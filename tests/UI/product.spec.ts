@@ -9,6 +9,7 @@ const products = [
     PRODUCTS.onesie,
     PRODUCTS.tshirt,
 ]
+
 test.describe('Products', () => {
     test('should add two products to cart', async ({ productsPage, cartPage }) => {
         await test.step('Add products to cart', async () => {
@@ -31,6 +32,7 @@ test.describe('Products', () => {
         });
 });
 
+
 for (const product of products) {
   test(`should add ${product} to cart`, async ({ productsPage, }) => {
     await test.step(`Add ${product} to cart`, async () => {
@@ -43,10 +45,18 @@ for (const product of products) {
   });
 }
 
-  test('should remove item from cart on products page', async ({ productsPage }) => {
-    await productsPage.addItem(PRODUCTS.backpack);
-    await expect(productsPage.shoppingCount).toHaveText('1');
 
-    await productsPage.removeProductsItem(PRODUCTS.backpack);
-    await expect(productsPage.shoppingCount).not.toBeVisible();
+  test('should remove item from cart on products page', async ({ productsPage }) => {
+    await test.step('Add product to cart', async () => {
+      await productsPage.addItem(PRODUCTS.backpack);
+    });
+    await test.step('Verify cart contains 1 product', async () => {
+      await expect(productsPage.shoppingCount).toHaveText('1');
+    });
+    await test.step('Remove product from cart', async () => {
+      await productsPage.removeProductsItem(PRODUCTS.backpack);
+    });
+    await test.step('Verify cart is empty', async () => {
+      await expect(productsPage.shoppingCount).not.toBeVisible();
+    });
   })
