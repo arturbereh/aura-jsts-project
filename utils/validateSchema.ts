@@ -1,9 +1,6 @@
 import Ajv, { type JSONSchemaType } from 'ajv';
 
-export function validateSchema<T>(
-  data: T,
-  schema: object
-): void {
+export function validateSchema<T>(data: T, schema: object): void {
   const ajv = new Ajv();
 
   const validate = ajv.compile(schema);
@@ -11,8 +8,6 @@ export function validateSchema<T>(
   const isValid = validate(data);
 
   if (!isValid) {
-    throw new Error(
-      `Schema validation failed: ${JSON.stringify(validate.errors)}`
-    );
+    throw new Error(`Schema validation failed: ${JSON.stringify(validate.errors)}`);
   }
 }

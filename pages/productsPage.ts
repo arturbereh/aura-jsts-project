@@ -13,23 +13,22 @@ export class ProductsPage {
   }
 
   async open() {
-  await this.page.goto('/inventory.html');
-}
+    await this.page.goto('/inventory.html');
+  }
 
   async addItem(itemName: string) {
-    const item = this.page.locator('.inventory_item').filter({hasText: itemName,});
+    const item = this.page.locator('.inventory_item').filter({ hasText: itemName });
 
     await item.getByRole('button', { name: 'Add to cart' }).click();
   }
-  
+
   async openShoppingCart() {
     await this.shoppingCart.click();
   }
 
   async removeProductsItem(itemName: string) {
-    const item = this.page.locator('.inventory_item').filter({hasText: itemName,});
+    const item = this.page.locator('.inventory_item').filter({ hasText: itemName });
 
     await item.getByRole('button', { name: 'Remove' }).click();
   }
-
 }

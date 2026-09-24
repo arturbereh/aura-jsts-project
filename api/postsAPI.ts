@@ -13,24 +13,24 @@ export class PostsApi {
   }
 
   async createPost(data: CreatePostRequest): Promise<APIResponse> {
-  return this.request.post('/posts', {
-    headers: { 
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
-    data,
-  });
-}
+    return this.request.post('/posts', {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      data,
+    });
+  }
   async updatePost(data: UpdatePostRequest): Promise<APIResponse> {
-  return this.request.put(`/posts/${data.userId}`, {
-    data: {
-      title: data.title,
-      body: data.body,
-      userId: data.userId,
-    },
-  });
-}
-async deletePost(postId: number): Promise<APIResponse> {
-  return this.request.delete(`/posts/${postId}`)
-};
+    return this.request.put(`/posts/${data.id}`, {
+      data: {
+        title: data.title,
+        body: data.body,
+        userId: data.userId,
+      },
+    });
+  }
+  async deletePost(postId: number): Promise<APIResponse> {
+    return this.request.delete(`/posts/${postId}`);
+  }
 }

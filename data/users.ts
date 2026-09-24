@@ -4,8 +4,8 @@ export const WEBSITE = {
 };
 
 export const API_WEBSITE = {
-    requests: 'https://jsonplaceholder.typicode.com',
-    auth: 'https://dummyjson.com',
+  requests: 'https://jsonplaceholder.typicode.com',
+  auth: 'https://dummyjson.com',
 };
 
 export const STANDARD_USER = {

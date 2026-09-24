@@ -1,10 +1,7 @@
 import { test, expect } from '../../fixtures/test';
 
 test('should get current user with access token', async ({ authApi }) => {
-  const loginResponse = await authApi.login(
-    'emilys',
-    'emilyspass'
-  );
+  const loginResponse = await authApi.login('emilys', 'emilyspass');
 
   expect(loginResponse.status()).toBe(200);
 

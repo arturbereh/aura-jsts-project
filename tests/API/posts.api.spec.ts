@@ -5,7 +5,6 @@ import { validateSchema } from '../../utils/validateSchema';
 import { POST_DATA, POSTS_DATA, UPDATE_POST_DATA } from '../../data/posts';
 import { logApiResponse } from '../../utils/logApiResponse';
 
-
 test('should get existing post', async ({ postsApi }) => {
   const response = await postsApi.getPost(1);
 
@@ -35,7 +34,7 @@ for (const postData of POSTS_DATA) {
 
     validateSchema(body, postSchema);
   });
-  }
+}
 
 test('should update a post', async ({ postsApi }) => {
   const response = await postsApi.updatePost(UPDATE_POST_DATA);
@@ -44,7 +43,7 @@ test('should update a post', async ({ postsApi }) => {
 
   const body = await response.json();
 
-  expect(body.id).toBe(UPDATE_POST_DATA.userId);
+  expect(body.id).toBe(UPDATE_POST_DATA.id);
   expect(body.title).toBe(UPDATE_POST_DATA.title);
   expect(body.body).toBe(UPDATE_POST_DATA.body);
   expect(body.userId).toBe(UPDATE_POST_DATA.userId);
@@ -53,4 +52,4 @@ test('should update a post', async ({ postsApi }) => {
 test('should delete existing post', async ({ postsApi }) => {
   const response = await postsApi.deletePost(7);
   expect(response.status()).toBe(200);
-})
+});

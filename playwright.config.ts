@@ -24,17 +24,20 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
-  ['html', {
-    outputFolder: 'playwright-report',
-    open: 'never',
-  }],
+    [
+      'html',
+      {
+        outputFolder: 'playwright-report',
+        open: 'never',
+      },
+    ],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     baseURL: WEBSITE.prod,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
-    video: 'retain-on-failure', 
+    video: 'retain-on-failure',
   },
 
   /* Configure projects for major browsers */
@@ -43,8 +46,9 @@ export default defineConfig({
       name: 'api',
       testMatch: /.*\.api\.spec\.ts/,
       testIgnore: /.*auth\.api\.spec\.ts/,
-      use: { 
-        baseURL: API_WEBSITE.requests },
+      use: {
+        baseURL: API_WEBSITE.requests,
+      },
     },
     {
       name: 'auth-api',
@@ -58,9 +62,7 @@ export default defineConfig({
 
     {
       name: 'desktop - chromium',
-      use: { ...devices['Desktop Chrome'], 
-      storageState: 'playwright/.auth/user.json',
-      },
+      use: { ...devices['Desktop Chrome'], storageState: 'playwright/.auth/user.json' },
       dependencies: ['setup'],
     },
 
@@ -71,9 +73,7 @@ export default defineConfig({
 
     {
       name: 'desktop - webkit',
-      use: { ...devices['Desktop Safari'],
-      storageState: 'playwright/.auth/user.json',
-      },
+      use: { ...devices['Desktop Safari'], storageState: 'playwright/.auth/user.json' },
       dependencies: ['setup'],
     },
 
@@ -84,9 +84,10 @@ export default defineConfig({
     // },
     {
       name: 'iPhone 16e landscape - Mobile Firefox',
-      use: { ...devices['iPhone 16e landscape'],
-      defaultBrowserType: 'firefox',
-      storageState: 'playwright/.auth/user.json',
+      use: {
+        ...devices['iPhone 16e landscape'],
+        defaultBrowserType: 'firefox',
+        storageState: 'playwright/.auth/user.json',
       },
       dependencies: ['setup'],
     },
