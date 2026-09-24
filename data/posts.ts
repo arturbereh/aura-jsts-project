@@ -13,6 +13,7 @@ export const SECOND_POST_DATA: CreatePostRequest = {
 };
 
 export const UPDATE_POST_DATA: UpdatePostRequest = {
+  id: 7,
   title: 'Updated via API title field',
   body: 'Updated via API body field',
   userId: 7,
