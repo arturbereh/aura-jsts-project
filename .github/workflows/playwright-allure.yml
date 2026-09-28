@@ -1,39 +1,133 @@
-name: Playwright Tests with Allure Report
+name: Allure Report Generation and Deployment
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-  workflow_dispatch:
+  workflow_dispatch: # Restricts this to manual execution only
+
+permissions:
+  contents: write # Required for GitHub Pages deployment
+  pages: write
+  id-token: write
 
 jobs:
-  test-and-report:
+  lint:
+    name: Lint & Format Check
     runs-on: ubuntu-latest
-    permissions:
-      contents: write # Required to push to the gh-pages branch
-
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 24
+          cache: npm
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright Browsers
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Check Prettier formatting
+        run: npm run format:check
+
+  ui-tests:
+    name: UI Tests - ${{ matrix.browser }}
+    needs: lint
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false # Ensures all browsers run even if one fails early
+      matrix:
+        browser:
+          - 'desktop - chromium'
+          - 'desktop - webkit'
+          - 'iPhone 16e landscape - Mobile Firefox'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      - name: Run Playwright tests
-        run: npx playwright test
-        continue-on-error: true # Crucial: Let the workflow continue even if tests fail
+      - name: Run UI tests
+        # Forces the allure reporter so we get raw JSONs in the allure-results folder
+        run: npx playwright test tests/UI --project="${{ matrix.browser }}" --reporter=allure-playwright
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          # strategy.job-index prevents artifact name errors caused by spaces/special chars in browser names
+          name: allure-results-ui-${{ strategy.job-index }}
+          path: allure-results/
+          retention-days: 1
+
+  api-tests:
+    name: API Tests
+    needs: lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run API tests
+        run: npx playwright test tests/API --project=api --project=auth-api --reporter=allure-playwright
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-api
+          path: allure-results/
+          retention-days: 1
+
+  generate-and-deploy-report:
+    name: Generate & Deploy Allure Report
+    needs: [ui-tests, api-tests]
+    if: always() # Crucial: forces report generation even if tests fail
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download all Allure results
+        uses: actions/download-artifact@v4
+        with:
+          pattern: allure-results-*
+          path: merged-allure-results
+          merge-multiple: true # Dumps API and all UI browser JSONs into a single directory
 
       - name: Generate Allure Report
-        run: npx allure generate allure-results --clean -o allure-report
+        run: npx allure generate merged-allure-results --clean -o allure-report
 
       - name: Deploy Report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
