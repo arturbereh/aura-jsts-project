@@ -31,11 +31,14 @@ export default defineConfig({
         open: 'never',
       },
     ],
-    ['allure-playwright', { 
-      detail: true, 
-      suiteTitle: false,
-      resultsDir: 'allure-results' 
-    }]
+    [
+      'allure-playwright',
+      {
+        detail: true,
+        suiteTitle: false,
+        resultsDir: 'allure-results',
+      },
+    ],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
