@@ -106,7 +106,7 @@ jobs:
     needs: [ui-tests, api-tests]
     if: always() # Crucial: forces report generation even if tests fail
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
